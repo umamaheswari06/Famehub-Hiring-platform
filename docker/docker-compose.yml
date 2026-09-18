@@ -1,0 +1,159 @@
+version: '3.8'
+
+services:
+  # 1. Primary Database: MySQL
+  mysql-db:
+    image: mysql:8.0
+    container_name: hiring-mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: hiring_db
+      MYSQL_ROOT_PASSWORD: rootpassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ../database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    networks:
+      - hiring-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # 2. Redis Cache & Queue for Judge0
+  judge0-redis:
+    image: redis:7-alpine
+    container_name: judge0-redis
+    restart: always
+    command: redis-server --appendonly yes
+    networks:
+      - hiring-network
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # 3. PostgreSQL Database for Judge0
+  judge0-db:
+    image: postgres:15-alpine
+    container_name: judge0-postgres
+    restart: always
+    environment:
+      POSTGRES_DB: judge0
+      POSTGRES_USER: judge0
+      POSTGRES_PASSWORD: judge0password
+    networks:
+      - hiring-network
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d judge0 -U judge0"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # 4. Judge0 API Service
+  judge0-api:
+    image: judge0/judge0:1.13.0
+    container_name: judge0-api
+    restart: always
+    ports:
+      - "2358:2358"
+    environment:
+      - REDIS_HOST=judge0-redis
+      - REDIS_PORT=6379
+      - DB_HOST=judge0-db
+      - DB_PORT=5432
+      - DB_USER=judge0
+      - DB_PASS=judge0password
+      - DB_NAME=judge0
+    depends_on:
+      judge0-redis:
+        condition: service_healthy
+      judge0-db:
+        condition: service_healthy
+    privileged: true # Required for cgroup memory & cpu containment in nested container
+    networks:
+      - hiring-network
+
+  # 5. Judge0 Worker Service (compiles & runs code sandboxes)
+  judge0-worker:
+    image: judge0/judge0:1.13.0
+    container_name: judge0-worker
+    restart: always
+    command: ["./scripts/worker"]
+    environment:
+      - REDIS_HOST=judge0-redis
+      - REDIS_PORT=6379
+      - DB_HOST=judge0-db
+      - DB_PORT=5432
+      - DB_USER=judge0
+      - DB_PASS=judge0password
+      - DB_NAME=judge0
+    depends_on:
+      judge0-redis:
+        condition: service_healthy
+      judge0-db:
+        condition: service_healthy
+    privileged: true
+    networks:
+      - hiring-network
+
+  # 6. Backend: Spring Boot 3 App
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    container_name: hiring-backend
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/hiring_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=rootpassword
+      - JUDGE0_API_URL=http://judge0-api:2358
+      - JWT_SECRET=5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437
+      - UPLOAD_PATH=/app/uploads
+    volumes:
+      - upload-data:/app/uploads
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+      judge0-api:
+        condition: service_started
+    networks:
+      - hiring-network
+
+  # 7. Frontend: React Vite App
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    container_name: hiring-frontend
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - hiring-network
+
+networks:
+  hiring-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
+    driver: local
+  redis-data:
+    driver: local
+  postgres-data:
+    driver: local
+  upload-data:
+    driver: local

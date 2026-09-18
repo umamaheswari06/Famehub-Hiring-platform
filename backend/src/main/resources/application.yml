@@ -1,0 +1,83 @@
+server:
+  port: 8080
+  error:
+    include-message: always
+
+spring:
+  application:
+    name: ai-powered-hiring-platform
+  
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:h2:mem:hiring_db;DB_CLOSE_DELAY=-1}
+    username: ${SPRING_DATASOURCE_USERNAME:sa}
+    password: ${SPRING_DATASOURCE_PASSWORD:}
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: true
+        
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+  mail:
+    host: ${SPRING_MAIL_HOST:smtp.gmail.com}
+    port: ${SPRING_MAIL_PORT:587}
+    username: ${SPRING_MAIL_USERNAME:your-email@gmail.com}
+    password: ${SPRING_MAIL_PASSWORD:your-gmail-app-password}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+
+# JWT Configuration
+security:
+  jwt:
+    secret: ${JWT_SECRET:5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437}
+    expiration-ms: 86400000 # 24 hours
+    refresh-expiration-ms: 604800000 # 7 days
+
+# File Storage Configuration
+file:
+  upload-dir: ${UPLOAD_PATH:./uploads/resumes}
+
+# Judge0 API Configuration
+# Judge0 API Configuration
+judge0:
+  api-url: ${JUDGE0_API_URL:http://13.235.94.106:2358}
+
+  #$env:JUDGE0_API_URL="http://13.235.94.106"
+
+# Gemini API Configuration
+gemini:
+  api-key: ${GEMINI_API_KEY:}
+  # Host language IDs in Judge0:
+  # Java: 62 (Java 17)
+  # Python: 71 (Python 3.8.1)
+  # C++: 54 (GCC 9.2.0)
+  # JavaScript: 63 (Node.js 12.14.0)
+  language-ids:
+    java: 62
+    python: 71
+    cpp: 54
+    javascript: 63
+
+# API Documentation (Swagger)
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+    tagsSorter: alpha
