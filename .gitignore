@@ -31,6 +31,9 @@ hs_err_pid*
 application-local.properties
 application-local.yml
 
+# Uploaded files (resumes, etc.)
+backend/uploads/
+
 # ===========================
 # Node.js / React (Frontend)
 # ===========================
