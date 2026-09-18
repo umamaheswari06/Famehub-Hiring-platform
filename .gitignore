@@ -74,6 +74,9 @@ Thumbs.db
 logs/
 *.log
 
+# Local JDK
+backend/jdk21/
+
 # ===========================
 # Package lock (optional — keep if you want reproducible installs)
 # ===========================
