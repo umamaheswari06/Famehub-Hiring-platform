@@ -82,3 +82,5 @@ backend/jdk21/
 # ===========================
 # package-lock.json
 # yarn.lock
+backend/jdk21/
+frontend/node_modules/
