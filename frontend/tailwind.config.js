@@ -17,10 +17,15 @@ export default {
           light: '#fb923c',
           dark: '#e8640f',
         },
+        secondary: {
+          DEFAULT: '#e2e8f0',
+          dark: '#cbd5e1',
+        },
         surface: {
           DEFAULT: '#eef2f9',
           off: '#f8f9fc',
           border: '#dde3ee',
+          muted: '#f1f5f9',
         },
         text: {
           dark: '#0d1b36',

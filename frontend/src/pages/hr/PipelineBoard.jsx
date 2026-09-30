@@ -7,12 +7,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import api from '../../utils/api';
 
 const PIPELINE_STAGES = [
-  { id: 'APPLIED', title: 'New Applied', icon: <FileText className="w-4 h-4" />, color: 'bg-primary/10 text-white border-primary/20' },
-  { id: 'SCREENING', title: 'Screening', icon: <User className="w-4 h-4" />, color: 'bg-primary/10 text-white border-primary/20' },
-  { id: 'ASSESSMENT', title: 'Assessment', icon: <ClipboardList className="w-4 h-4" />, color: 'bg-primary/10 text-white border-primary/20' },
-  { id: 'INTERVIEW', title: 'Interview', icon: <Video className="w-4 h-4" />, color: 'bg-primary/10 text-white border-primary/20' },
-  { id: 'OFFERED', title: 'Offered', icon: <Star className="w-4 h-4" />, color: 'bg-primary/10 text-white border-primary/20' },
-  { id: 'REJECTED', title: 'Rejected', icon: <X className="w-4 h-4" />, color: 'bg-primary/10 text-white border-primary/20' }
+  { id: 'APPLIED',    title: 'New Applied', icon: <FileText className="w-4 h-4" />, color: 'bg-primary/10 text-primary border-primary/20' },
+  { id: 'SCREENING',  title: 'Screening',   icon: <User className="w-4 h-4" />,     color: 'bg-amber-50 text-amber-700 border-amber-200' },
+  { id: 'ASSESSMENT', title: 'Assessment',  icon: <ClipboardList className="w-4 h-4" />, color: 'bg-violet-50 text-violet-700 border-violet-200' },
+  { id: 'INTERVIEW',  title: 'Interview',   icon: <Video className="w-4 h-4" />,    color: 'bg-sky-50 text-sky-700 border-sky-200' },
+  { id: 'OFFERED',    title: 'Offered',     icon: <Star className="w-4 h-4" />,     color: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
+  { id: 'REJECTED',   title: 'Rejected',    icon: <X className="w-4 h-4" />,        color: 'bg-red-50 text-red-700 border-red-200' }
 ];
 
 const containerVariants = {
@@ -148,7 +148,7 @@ export default function PipelineBoard() {
                   >
                     <Card 
                       hoverable 
-                      className="cursor-pointer active:cursor-pointer border-secondary/50/80 bg-[#08566E]/90 hover:border-primary/35 transition duration-200"
+                      className="cursor-pointer border-slate-200 bg-white hover:border-primary/40 transition duration-200"
                       onClick={(e) => {
                         if (e.target.tagName !== 'BUTTON' && !e.target.closest('button')) {
                           handleCardClick(app);
@@ -197,7 +197,7 @@ export default function PipelineBoard() {
               </AnimatePresence>
 
               {getAppsForStage(stage.id).length === 0 && (
-                <div className="p-8 border-[#362b4d] border-[#362b4d]ashed border-secondary/50 rounded-xl flex items-center justify-center text-sm text-slate-600 bg-surface-muted/30">
+                <div className="p-8 border border-dashed border-slate-200 rounded-xl flex items-center justify-center text-sm text-slate-500 bg-slate-50/50">
                   Drop candidates here
                 </div>
               )}
@@ -214,17 +214,17 @@ export default function PipelineBoard() {
               initial={{ scale: 0.96, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.96, opacity: 0 }}
-              className="relative w-full max-w-4xl max-h-[85vh] overflow-y-auto bg-[#08566E] border border-secondary/50 rounded-2xl p-6 shadow-2xl flex flex-col gap-6"
+              className="relative w-full max-w-4xl max-h-[85vh] overflow-y-auto bg-white border border-slate-200 rounded-2xl p-6 shadow-2xl flex flex-col gap-6"
             >
               {/* Header */}
-              <div className="flex justify-between items-start border-b border-secondary/50/60 pb-4">
+              <div className="flex justify-between items-start border-b border-secondary/30 pb-4">
                 <div>
                   <h3 className="text-xl font-bold text-primary">{selectedApp.candidateName}</h3>
-                  <span className="text-xs text-primary font-mono">{selectedApp.candidateEmail}</span>
+                  <span className="text-xs text-slate-500 font-mono">{selectedApp.candidateEmail}</span>
                 </div>
                 <button 
                   onClick={() => setSelectedApp(null)}
-                  className="p-1.5 rounded-lg hover:bg-surface-muted hover:bg-secondary/20 text-slate-600 hover:text-primary transition"
+                  className="p-1.5 rounded-lg hover:bg-secondary/30 text-slate-600 hover:text-primary transition"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -235,7 +235,7 @@ export default function PipelineBoard() {
                 
                 {/* Meta details */}
                 <div className="md:col-span-1 flex flex-col gap-4">
-                  <div className="p-4 rounded-xl bg-surface-muted/50 border border-secondary/50/60 flex flex-col gap-3">
+                  <div className="p-4 rounded-xl bg-slate-50/50 border border-secondary/30 flex flex-col gap-3">
                     <span className="text-xs text-slate-600 uppercase font-bold tracking-wide">Application Meta</span>
                     <div className="flex flex-col gap-1">
                       <span className="text-xs text-slate-600">Job Profile</span>
@@ -250,7 +250,7 @@ export default function PipelineBoard() {
                       <span className="text-primary font-semibold uppercase">{selectedApp.status}</span>
                     </div>
                     {selectedApp.resumeId && (
-                      <div className="flex flex-col gap-2 mt-2 pt-2 border-t border-secondary/50/40">
+                      <div className="flex flex-col gap-2 mt-2 pt-2 border-t border-secondary/30">
                         <span className="text-xs text-slate-600 font-semibold">Resume: {selectedApp.resumeName}</span>
                         <div className="flex gap-2">
                           <a 
@@ -264,7 +264,7 @@ export default function PipelineBoard() {
                           <a 
                             href={`http://localhost:8080/api/public/resume/${selectedApp.resumeId}/download`}
                             download
-                            className="flex-1 text-center py-1.5 rounded bg-surface-muted hover:bg-secondary/20 border border-surface-border text-xs text-primary hover:bg-secondary/30 transition"
+                            className="flex-1 text-center py-1.5 rounded bg-slate-100 hover:bg-secondary/30 border border-surface-border text-xs text-primary transition"
                           >
                             Download
                           </a>
@@ -284,18 +284,18 @@ export default function PipelineBoard() {
                       <span className="text-xs text-slate-600">Analyzing developer journey log...</span>
                     </div>
                   ) : submissions.length === 0 ? (
-                    <div className="p-8 border border-dashed border-secondary/50 rounded-xl flex items-center justify-center text-sm text-slate-600 bg-surface-muted/20">
+                    <div className="p-8 border border-dashed border-secondary/40 rounded-xl flex items-center justify-center text-sm text-slate-500 bg-slate-50/50">
                       No coding submissions completed by this candidate yet.
                     </div>
                   ) : (
                     <div className="flex flex-col gap-6">
                       {submissions.map((sub, sIdx) => (
-                        <div key={sub.submissionId || sIdx} className="flex flex-col gap-4 border border-secondary/50 p-5 rounded-xl bg-surface-muted/40">
+                        <div key={sub.submissionId || sIdx} className="flex flex-col gap-4 border border-secondary/30 p-5 rounded-xl bg-slate-50/40">
                           {/* Submission Meta */}
-                          <div className="flex justify-between items-center pb-2 border-b border-secondary/50/40">
+                          <div className="flex justify-between items-center pb-2 border-b border-secondary/30">
                             <span className="text-xs font-semibold text-primary">Score: {sub.score.toFixed(1)}%</span>
                             <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                              sub.status === 'ACCEPTED' ? 'bg-primary/10 text-white' : 'bg-primary/10 text-white'
+                              sub.status === 'ACCEPTED' ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-600'
                             }`}>{sub.status}</span>
                           </div>
 

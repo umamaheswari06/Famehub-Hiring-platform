@@ -227,10 +227,10 @@ export default function AssessmentManagement() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
         {assessments.map(test => (
-          <Card key={test.id} className="group hover:border-primary/50 transition-colors cursor-pointer bg-[#08566E]/40 border-secondary/50">
+          <Card key={test.id} className="group hover:border-primary/50 transition-colors cursor-pointer bg-white border-slate-200">
             <CardContent className="p-6 flex flex-col gap-4">
               <div className="flex justify-between items-start">
-                <div className={`p-3 rounded-lg ${test.type === 'CODING' ? 'bg-primary/10 text-white' : 'bg-primary/10 text-white'}`}>
+                <div className={`p-3 rounded-lg ${test.type === 'CODING' ? 'bg-violet-100 text-violet-700' : 'bg-primary/10 text-primary'}`}>
                   {test.type === 'CODING' ? <Code2 className="w-6 h-6" /> : <FileSpreadsheet className="w-6 h-6" />}
                 </div>
                 <Badge variant={test.status === 'ACTIVE' ? 'success' : 'neutral'}>{test.status}</Badge>

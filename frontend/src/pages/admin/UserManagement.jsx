@@ -63,7 +63,7 @@ export default function UserManagement() {
                 <TableRow key={user.id} className="group">
                   <TableCell>
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-[#08566E] flex items-center justify-center font-bold text-primary">
+                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary border border-primary/20">
                         {user.name.charAt(0)}
                       </div>
                       <div>

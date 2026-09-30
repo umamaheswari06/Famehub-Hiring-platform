@@ -240,14 +240,14 @@ export default function CodingEditor() {
                       <div className="flex items-center gap-3">
                         <span className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${
                           result.status === 'ACCEPTED' 
-                            ? 'bg-primary/10 text-white border border-primary/20' 
-                            : 'bg-primary/10 text-white border border-primary/20'
+                            ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' 
+                            : 'bg-red-50 text-red-600 border border-red-200'
                         }`}>
                           {result.status === 'ACCEPTED' ? <CheckCircle2 className="w-3.5 h-3.5" /> : <XCircle className="w-3.5 h-3.5" />}
                           {result.status}
                         </span>
                         <span className="text-primary font-semibold text-sm">
-                          Score: <span className={result.score === 100 ? 'text-primary' : 'text-primary'}>{result.score}%</span>
+                          Score: <span className={result.score === 100 ? 'text-emerald-600' : 'text-slate-700'}>{result.score}%</span>
                         </span>
                       </div>
                       <span className="text-xs text-slate-600">

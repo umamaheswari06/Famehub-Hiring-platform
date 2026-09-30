@@ -87,13 +87,13 @@ export default function McqRunner() {
   if (result) {
     return (
       <div className="flex flex-col items-center justify-center h-full gap-6 animate-in fade-in zoom-in duration-500">
-        <div className={`p-6 rounded-full ${result.passed ? 'bg-primary/10 text-white shadow-md shadow-primary/10' : 'bg-primary/10 text-white'}`}>
+        <div className={`p-6 rounded-full ${result.passed ? 'bg-emerald-50 text-emerald-600 shadow-md shadow-emerald-100' : 'bg-red-50 text-red-500 shadow-md shadow-red-100'}`}>
           {result.passed ? <CheckCircle2 className="w-16 h-16" /> : <AlertTriangle className="w-16 h-16" />}
         </div>
         <div className="text-center">
           <h1 className="text-3xl font-bold text-primary mb-2">Assessment Submitted</h1>
-          <p className="text-xl text-slate-600">Your Score: <span className={result.passed ? 'text-primary font-bold' : 'text-primary font-bold'}>{result.score.toFixed(1)}%</span></p>
-          <p className={`mt-2 font-semibold ${result.passed ? 'text-primary' : 'text-primary'}`}>
+          <p className="text-xl text-slate-600">Your Score: <span className={result.passed ? 'text-emerald-600 font-bold' : 'text-red-500 font-bold'}>{result.score.toFixed(1)}%</span></p>
+          <p className={`mt-2 font-semibold ${result.passed ? 'text-emerald-600' : 'text-red-500'}`}>
             {result.passed ? 'Congratulations, you passed!' : 'Unfortunately, you did not meet the passing score.'}
           </p>
         </div>

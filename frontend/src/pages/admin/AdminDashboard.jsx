@@ -74,7 +74,7 @@ export default function AdminDashboard() {
                 <p className="text-sm font-medium text-slate-600">Total Candidates</p>
                 <h3 className="text-3xl font-bold text-primary mt-2">{stats?.totalCandidates || 0}</h3>
               </div>
-              <div className="p-3 bg-primary/10 rounded-lg text-white">
+              <div className="p-3 bg-primary/10 rounded-lg text-primary">
                 <Users className="w-5 h-5" />
               </div>
             </div>
@@ -92,7 +92,7 @@ export default function AdminDashboard() {
                 <p className="text-sm font-medium text-slate-600">HR Accounts</p>
                 <h3 className="text-3xl font-bold text-primary mt-2">{stats?.totalHr || 0}</h3>
               </div>
-              <div className="p-3 bg-primary/10 rounded-lg text-white">
+              <div className="p-3 bg-primary/10 rounded-lg text-primary">
                 <CheckCircle className="w-5 h-5" />
               </div>
             </div>
@@ -110,7 +110,7 @@ export default function AdminDashboard() {
                 <p className="text-sm font-medium text-slate-600">Active Jobs</p>
                 <h3 className="text-3xl font-bold text-primary mt-2">{stats?.totalJobs || 0}</h3>
               </div>
-              <div className="p-3 bg-primary/10 rounded-lg text-white">
+              <div className="p-3 bg-primary/10 rounded-lg text-primary">
                 <Briefcase className="w-5 h-5" />
               </div>
             </div>
@@ -128,7 +128,7 @@ export default function AdminDashboard() {
                 <p className="text-sm font-medium text-slate-600">Total Applications</p>
                 <h3 className="text-3xl font-bold text-primary mt-2">{stats?.totalApplications || 0}</h3>
               </div>
-              <div className="p-3 bg-primary/10 rounded-lg text-white">
+              <div className="p-3 bg-primary/10 rounded-lg text-primary">
                 <FileText className="w-5 h-5" />
               </div>
             </div>
@@ -148,12 +148,12 @@ export default function AdminDashboard() {
           <CardContent className="flex-1 min-h-[300px]">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={activityData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#08566E" vertical={false} />
-                <XAxis dataKey="name" stroke="#8b949e" tick={{fill: '#8b949e'}} tickLine={false} axisLine={false} />
-                <YAxis stroke="#8b949e" tick={{fill: '#8b949e'}} tickLine={false} axisLine={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
+                <XAxis dataKey="name" stroke="#94a3b8" tick={{fill: '#94a3b8'}} tickLine={false} axisLine={false} />
+                <YAxis stroke="#94a3b8" tick={{fill: '#94a3b8'}} tickLine={false} axisLine={false} />
                 <Tooltip 
-                  contentStyle={{ backgroundColor: '#08566E', borderColor: '#08566E', borderRadius: '8px', color: '#c9d1d9' }}
-                  itemStyle={{ color: '#c9d1d9' }}
+                  contentStyle={{ backgroundColor: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px', color: '#3d4f6e' }}
+                  itemStyle={{ color: '#3d4f6e' }}
                 />
                 <Line type="monotone" dataKey="active" stroke="#3b82f6" strokeWidth={3} dot={{r: 4, fill: '#3b82f6', strokeWidth: 0}} activeDot={{r: 6, strokeWidth: 0}} />
                 <Line type="monotone" dataKey="new" stroke="#8b5cf6" strokeWidth={3} dot={{r: 4, fill: '#8b5cf6', strokeWidth: 0}} activeDot={{r: 6, strokeWidth: 0}} />

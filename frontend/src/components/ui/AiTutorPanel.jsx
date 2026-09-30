@@ -138,7 +138,7 @@ export default function AiTutorPanel({
       {/* Header */}
       <div className="flex items-center justify-between p-4 bg-white border-b border-secondary/50 backdrop-blur-none">
         <div className="flex items-center gap-2">
-          <div className="p-1.5 rounded-lg bg-primary/10 text-white border border-primary/20 shadow-md shadow-primary/10/20 animate-pulse">
+          <div className="p-1.5 rounded-lg bg-primary/10 text-primary border border-primary/20 shadow-sm animate-pulse">
             <Sparkles className="w-4 h-4" />
           </div>
           <div>

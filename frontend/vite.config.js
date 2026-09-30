@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: '/Famehub-Hiring-platform/',
+  base: '/',  // Use '/' for local dev; change to '/Famehub-Hiring-platform/' for GitHub Pages
   server: {
     port: 5173,
     host: true,
@@ -17,5 +17,19 @@ export default defineConfig({
         secure: false,
       }
     }
+  },
+  build: {
+    chunkSizeWarningLimit: 1500,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+          motion: ['framer-motion'],
+          charts: ['recharts'],
+          editor: ['@monaco-editor/react'],
+        }
+      }
+    }
   }
 })
+
