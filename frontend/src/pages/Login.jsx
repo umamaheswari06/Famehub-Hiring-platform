@@ -10,6 +10,13 @@ const DEMO_ACCOUNTS = [
   { role: 'Candidate', email: 'candidate@famehub.com',  password: 'candidatepassword',  icon: '🎯' },
 ];
 
+/* ── Mock users for demo/offline mode ───────────────────── */
+const MOCK_USERS = {
+  'admin@famehub.com':     { id: 1, name: 'Admin User',       email: 'admin@famehub.com',    roles: ['ROLE_ADMIN'],     token: 'demo-admin-token',     refreshToken: 'demo-refresh' },
+  'hr@famehub.com':        { id: 2, name: 'HR Manager',       email: 'hr@famehub.com',       roles: ['ROLE_HR'],        token: 'demo-hr-token',        refreshToken: 'demo-refresh' },
+  'candidate@famehub.com': { id: 3, name: 'Alex Candidate',  email: 'candidate@famehub.com', roles: ['ROLE_CANDIDATE'], token: 'demo-candidate-token', refreshToken: 'demo-refresh' },
+};
+
 export default function Login() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -17,13 +24,24 @@ export default function Login() {
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
+  const loginWithMock = (email) => {
+    const user = MOCK_USERS[email];
+    if (!user) return false;
+    localStorage.setItem('accessToken', user.token);
+    localStorage.setItem('refreshToken', user.refreshToken);
+    localStorage.setItem('user', JSON.stringify({ id: user.id, name: user.name, email: user.email, roles: user.roles }));
+    if (user.roles.includes('ROLE_ADMIN')) navigate('/admin/dashboard');
+    else if (user.roles.includes('ROLE_HR')) navigate('/hr/dashboard');
+    else navigate('/candidate/dashboard');
+    return true;
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
     try {
       const res = await api.post('/api/auth/login', formData);
-      // Store both access + refresh tokens
       localStorage.setItem('accessToken', res.data.token);
       localStorage.setItem('refreshToken', res.data.refreshToken);
       localStorage.setItem('user', JSON.stringify({
@@ -32,13 +50,14 @@ export default function Login() {
         email: res.data.email,
         roles: res.data.roles,
       }));
-      // Navigate by role
       if (res.data.roles.includes('ROLE_ADMIN')) navigate('/admin/dashboard');
       else if (res.data.roles.includes('ROLE_HR')) navigate('/hr/dashboard');
       else navigate('/candidate/dashboard');
     } catch (err) {
+      // No network / backend not running → try demo login
       if (!err.response) {
-        setError('Cannot connect to server. Please make sure the backend is running on port 8080.');
+        if (loginWithMock(formData.email)) return;
+        setError('Cannot connect to server. Use a demo account from the right panel to explore the app.');
       } else {
         setError(err.response?.data?.message || 'Invalid email or password. Please try again.');
       }
@@ -47,11 +66,13 @@ export default function Login() {
     }
   };
 
-  /* Quick-fill a demo account */
+  /* Quick-fill a demo account and immediately sign in */
   const fillDemo = (account) => {
     setFormData({ email: account.email, password: account.password });
     setError('');
+    loginWithMock(account.email);
   };
+
 
   return (
     <div style={{
@@ -194,11 +215,14 @@ export default function Login() {
 
           {/* Info box */}
           <div style={{ background:'rgba(249,115,22,0.06)', border:'1.5px solid rgba(249,115,22,0.2)', borderRadius:'var(--radius-lg)', padding:'1rem 1.25rem', display:'flex', gap:'0.75rem', alignItems:'flex-start' }}>
-            <span style={{ fontSize:'1.2rem', flexShrink:0 }}>💡</span>
+            <span style={{ fontSize:'1.2rem', flexShrink:0 }}>⚡</span>
             <div>
-              <div style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:'0.85rem', color:'var(--accent)', marginBottom:'0.3rem' }}>Heads up</div>
+              <div style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:'0.85rem', color:'var(--accent)', marginBottom:'0.3rem', display:'flex', alignItems:'center', gap:'0.5rem' }}>
+                Demo Mode Active
+                <span style={{ fontSize:'0.65rem', background:'var(--accent)', color:'#fff', padding:'0.1rem 0.5rem', borderRadius:'20px', fontWeight:700, letterSpacing:'0.05em' }}>LIVE</span>
+              </div>
               <p style={{ fontSize:'0.8rem', color:'var(--text-body)', lineHeight:1.6, margin:0 }}>
-                Make sure the <strong>Spring Boot backend</strong> is running on <code style={{ background:'var(--surface)', padding:'0.1rem 0.4rem', borderRadius:'4px', fontSize:'0.78rem' }}>localhost:8080</code> before signing in.
+                Click any demo account card above to <strong>instantly sign in</strong> and explore the full platform — no backend required.
               </p>
             </div>
           </div>
@@ -218,3 +242,4 @@ export default function Login() {
     </div>
   );
 }
+
